@@ -4,6 +4,7 @@ version = "0.1.0"
 edition = "2021"
 license = "WTFPL"
 description = "A Bevy plugin for quick responsive behaviors"
+# autoexamples = false
 
 [dev-dependencies]
 bevy = { version = "0.13", default-features = false, features = [
