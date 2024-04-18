@@ -5,6 +5,8 @@ use bevy_framepace::{FramepacePlugin, FramepaceSettings, Limiter};
 
 pub struct QuickResponsePlugin {
     mode: QuickResponseMode,
+    /// if true, do not add the bevy_framepace::FramepacePlugin
+    _no_framepace_for_test: bool
 }
 
 #[derive(Debug, Clone, PartialEq, Copy)]
@@ -69,6 +71,7 @@ impl QuickResponsePlugin {
     pub fn new(mode: QuickResponseMode) -> Self {
         QuickResponsePlugin {
             mode,
+            _no_framepace_for_test: false
         }
     }
 
@@ -81,6 +84,53 @@ impl QuickResponsePlugin {
 
     pub fn none(should_default_plugins_enabled: bool) -> Self {
         QuickResponsePlugin::new(QuickResponseMode::None(should_default_plugins_enabled))
+    }
+
+    pub(crate) fn with_no_framepace_for_test(&self) -> Self {
+        QuickResponsePlugin {
+            mode: self.mode,
+            _no_framepace_for_test: true,
+        }
+    }
+
+    pub fn with_no_default_plugins(&self) -> Self {
+        match self.mode {
+            QuickResponseMode::None(_) => {
+                QuickResponsePlugin::none(false)
+            }
+            QuickResponseMode::FastVsync(params) => {
+                QuickResponsePlugin::new(
+                    QuickResponseMode::FastVsync(QuickResponseParameters {
+                        auto_init_default_plugins: false,
+                        ..params
+                    })
+                )
+            }
+            QuickResponseMode::Immediate(params) => {
+                QuickResponsePlugin::new(
+                    QuickResponseMode::Immediate(QuickResponseParameters {
+                        auto_init_default_plugins: false,
+                        ..params
+                    })
+                )
+            }
+            QuickResponseMode::AutoNoVsync(params) => {
+                QuickResponsePlugin::new(
+                    QuickResponseMode::AutoNoVsync(QuickResponseParameters {
+                        auto_init_default_plugins: false,
+                        ..params
+                    })
+                )
+            }
+            QuickResponseMode::PowerSaving(params) => {
+                QuickResponsePlugin::new(
+                    QuickResponseMode::PowerSaving(QuickResponseParametersWithNoBaseFps {
+                        auto_init_default_plugins: false,
+                        ..params
+                    })
+                )
+            }
+        }
     }
 
     pub fn window_plugin(&self) -> WindowPlugin {
@@ -233,20 +283,98 @@ impl Plugin for QuickResponsePlugin {
             ));
         }
 
-        app.add_plugins(FramepacePlugin);
-        app.add_systems(Startup, setup_fps(max_fps));
+        if !self._no_framepace_for_test {
+            app.add_plugins(FramepacePlugin);
+            app.add_systems(Startup, setup_fps(max_fps));
+        }
     }
 }
 
 #[cfg(test)]
 mod tests {
+    use bevy::{log::LogPlugin, winit::WinitPlugin};
+
     use super::*;
 
     #[test]
-    fn test_plugin() {
+    fn test_plugin_none() {
         App::new()
             .add_plugins(MinimalPlugins)
             .add_plugins(QuickResponsePlugin::none(false))
+            .update()
+    }
+
+    #[test]
+    #[should_panic]
+    fn test_plugin_none_default_plugins() {
+        App::new()
+            .add_plugins(MinimalPlugins)
+            .add_plugins(QuickResponsePlugin::none(true))
+            .update()
+    }
+
+    #[test]
+    fn test_plugin_power_saving() {
+        let pl = QuickResponsePlugin::power_saving(60.0)
+            .with_no_default_plugins()
+            .with_no_framepace_for_test();
+
+        App::new()
+            .add_plugins(MinimalPlugins)
+            .add_plugins(pl.window_plugin())
+            .add_plugins(pl)
+            .update()
+    }
+
+    #[test]
+    fn test_plugin_default() {
+        let pl = QuickResponsePlugin::default()
+            .with_no_default_plugins()
+            .with_no_framepace_for_test();
+
+        App::new()
+            .add_plugins(MinimalPlugins)
+            .add_plugins(pl.window_plugin())
+            .add_plugins(pl)
+            .update()
+    }
+
+    #[test]
+    fn test_plugin_fast_vsync() {
+        let pl = QuickResponsePlugin::new(QuickResponseMode::FastVsync(QuickResponseParameters::default()))
+            .with_no_default_plugins()
+            .with_no_framepace_for_test();
+
+        App::new()
+            .add_plugins(MinimalPlugins)
+            .add_plugins(pl.window_plugin())
+            .add_plugins(pl)
+            .update()
+    }
+
+    #[test]
+    fn test_plugin_immediate() {
+        let pl = QuickResponsePlugin::new(QuickResponseMode::Immediate(QuickResponseParameters::default()))
+            .with_no_default_plugins()
+            .with_no_framepace_for_test();
+
+        App::new()
+            .add_plugins(MinimalPlugins)
+            .add_plugins(pl.window_plugin())
+            .add_plugins(pl)
+            .update()
+    }
+
+    #[test]
+    fn test_plugin_auto_no_vsync() {
+        let pl = QuickResponsePlugin::new(QuickResponseMode::AutoNoVsync(QuickResponseParameters::default()))
+            .with_no_default_plugins()
+            .with_no_framepace_for_test();
+
+        App::new()
+            .add_plugins(MinimalPlugins)
+            .add_plugins(pl.window_plugin())
+            .add_plugins(pl)
             .update()
     }
 }
