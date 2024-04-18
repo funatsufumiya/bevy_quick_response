@@ -609,7 +609,7 @@ checksum = "8050e2869fe341db6874203b5a01ff12673807a2c7c80cb829f6c7bea6997268"
 
 [[package]]
 name = "bevy_quick_response"
-version = "0.1.8"
+version = "0.1.9"
 dependencies = [
  "bevy",
  "bevy_framepace",

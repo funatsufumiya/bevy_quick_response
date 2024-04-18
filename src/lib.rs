@@ -82,6 +82,30 @@ impl QuickResponsePlugin {
         }))
     }
 
+    pub fn fast_vsync(base_fps: f64, max_fps: f64) -> Self {
+        QuickResponsePlugin::new(QuickResponseMode::FastVsync(QuickResponseParameters {
+            base_fps,
+            max_fps,
+            auto_init_default_plugins: true
+        }))
+    }
+
+    pub fn immediate(base_fps: f64, max_fps: f64) -> Self {
+        QuickResponsePlugin::new(QuickResponseMode::Immediate(QuickResponseParameters {
+            base_fps,
+            max_fps,
+            auto_init_default_plugins: true
+        }))
+    }
+
+    pub fn auto_no_vsync(base_fps: f64, max_fps: f64) -> Self {
+        QuickResponsePlugin::new(QuickResponseMode::AutoNoVsync(QuickResponseParameters {
+            base_fps,
+            max_fps,
+            auto_init_default_plugins: true
+        }))
+    }
+
     pub fn none(should_default_plugins_enabled: bool) -> Self {
         QuickResponsePlugin::new(QuickResponseMode::None(should_default_plugins_enabled))
     }

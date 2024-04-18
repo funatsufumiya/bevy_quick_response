@@ -9,6 +9,8 @@ fn main() {
     App::new()
         // NOTE: DefaultPlugin added automatically by default in QuickResponsePlugin
         .add_plugins(QuickResponsePlugin::power_saving(60.0))
+        // .add_plugins(QuickResponsePlugin::immediate(60.0, 60.0)) // other mode
+        // .add_plugins(QuickResponsePlugin::auto_no_vsync(60.0, 60.0)) // other mode
         .add_plugins(FrameTimeDiagnosticsPlugin::default())
         .add_systems(Update, bevy::window::close_on_esc)
         .add_systems(Startup, setup_camera)
