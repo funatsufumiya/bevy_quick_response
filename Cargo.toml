@@ -1,0 +1,26 @@
+[package]
+name = "bevy_quick_response"
+version = "0.1.0"
+edition = "2021"
+license = "WTFPL"
+description = "A Bevy plugin for quick responsive behaviors"
+
+[dev-dependencies]
+bevy = { version = "0.13", default-features = false, features = [
+    "bevy_winit",
+    "bevy_asset",
+    "bevy_sprite",
+    "bevy_core_pipeline",
+    "bevy_gizmos",
+    "bevy_ui",
+    "bevy_text",
+    "bevy_render",
+    "default_font",
+] }
+
+[dependencies]
+bevy = { version = "0.13", default-features = false, features = [
+    "bevy_winit",
+    "bevy_asset",
+] }
+bevy_framepace = "0.15.0"
