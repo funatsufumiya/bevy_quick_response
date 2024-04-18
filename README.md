@@ -32,7 +32,7 @@ Customizing the behavior, see [examples/advanced.rs](examples/advanced.rs).
 
 - By default, [`Mailbox`](https://docs.rs/bevy_window/latest/bevy_window/enum.PresentMode.html#variant.Mailbox) (Fast VSync) is selected for Windows/Linux (DX11/DX12, Vulkan), and [`AutoNoVsync`](https://docs.rs/bevy_window/latest/bevy_window/enum.PresentMode.html#variant.AutoNoVsync) is selected for macOS (Metal) and others.
 - The base FPS is set to 60, and the maximum FPS is set to 120.
-    - The base FPS setting uses the `wait` of `UpdateMode::ReactiveLowPower`.
+    - The base FPS setting uses the `wait` of [`UpdateMode::ReactiveLowPower`](https://docs.rs/bevy/latest/bevy/winit/enum.UpdateMode.html#variant.ReactiveLowPower).
     - The maximum FPS limit uses [bevy_framepace](https://github.com/aevyrie/bevy_framepace).
 
 ## Notes
