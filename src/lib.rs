@@ -79,8 +79,8 @@ impl QuickResponsePlugin {
         }))
     }
 
-    pub fn none(is_default_plugins_enabled: bool) -> Self {
-        QuickResponsePlugin::new(QuickResponseMode::None(true))
+    pub fn none(should_default_plugins_enabled: bool) -> Self {
+        QuickResponsePlugin::new(QuickResponseMode::None(should_default_plugins_enabled))
     }
 
     pub fn window_plugin(&self) -> WindowPlugin {
@@ -245,8 +245,8 @@ mod tests {
     #[test]
     fn test_plugin() {
         App::new()
-            // .add_plugins(MinimalPlugins)
-            .add_plugins(QuickResponsePlugin::default())
-            .update();
+            .add_plugins(MinimalPlugins)
+            .add_plugins(QuickResponsePlugin::none(false))
+            .update()
     }
 }

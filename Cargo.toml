@@ -1,6 +1,6 @@
 [package]
 name = "bevy_quick_response"
-version = "0.1.5"
+version = "0.1.6"
 edition = "2021"
 license = "WTFPL"
 description = "A Bevy plugin for quick responsive behaviors"
