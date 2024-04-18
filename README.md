@@ -27,3 +27,14 @@ Customizing the behavior, see [examples/advanced.rs](examples/advanced.rs).
 | Bevy | bevy_quick_response |
 |---------|-----------------------------|
 | 0.13          | 0.1                       |
+
+## What this plugin does
+
+- By default, `Mailbox` (Fast VSync) is selected for Windows/Linux (DX11/DX12, Vulkan), and `AutoNoVsync` (No VSync) is selected for macOS (Metal).
+- The base FPS is set to 60, and the maximum FPS is set to 120.
+    - The base FPS setting uses the `wait` of `UpdateMode::ReactiveLowPower`.
+    - The maximum FPS limit uses [bevy_framepace](https://github.com/aevyrie/bevy_framepace).
+
+## Notes
+
+- By default, there may be flickering on Mac, but the tuning is fine in the author's verification environment (M1/M2). (The reason for setting the maximum FPS to 120 is for that adjustment.)
