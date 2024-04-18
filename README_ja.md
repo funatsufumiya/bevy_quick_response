@@ -10,7 +10,7 @@ Bevyの通常の挙動は、VSyncがオンになり、3フレームの遅延が�
 
 このプラグインでは、VSyncをオフにして応答性を改善しつつも、できる限りVSyncをオンにした場合と同じように動作するように設定を変更します。(デフォルトでは、ベースFPSは60、最大FPSは120に設定されます。)
 
-# Usage
+## Usage
 
 ```rust
 app.add_plugins(QuickResponsePlugin::default())
@@ -20,7 +20,7 @@ app.add_plugins(QuickResponsePlugin::default())
 
 挙動をカスタマイズしたい場合は、[examples/advanced.rs](examples/advanced.rs)を参照してください。
 
-# Version table
+## Version table
 
 | Bevy | bevy_quick_response |
 |---------|-----------------------------|
