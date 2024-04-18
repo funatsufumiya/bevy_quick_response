@@ -28,7 +28,7 @@ app.add_plugins(QuickResponsePlugin::default())
 
 ## このプラグインがやっていること
 
-- デフォルトでは、Windows/Linux (DX11/DX12, Vulkan) では`Mailbox` (Fast VSync)、macOS (Metal) では`AutoNoVsync` (No VSync) が選択されます。
+- デフォルトでは、Windows/Linux (DX11/DX12, Vulkan) では[`Mailbox`](https://docs.rs/bevy_window/latest/bevy_window/enum.PresentMode.html#variant.Mailbox) (Fast VSync)、macOS (Metal) やそれ以外では [`AutoNoVsync`](https://docs.rs/bevy_window/latest/bevy_window/enum.PresentMode.html#variant.AutoNoVsync) が選択されます。
 - ベースFPSは60、最大FPSは120に設定されます。
     - ベースFPSの設定は `UpdateMode::ReactiveLowPower` の`wait`を利用しています。
     - 最大FPSの制限は、[bevy_framepace](https://github.com/aevyrie/bevy_framepace)を利用しています。

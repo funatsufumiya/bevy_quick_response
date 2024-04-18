@@ -67,6 +67,8 @@ impl QuickResponsePlugin {
                         present_mode: bevy::window::PresentMode::AutoNoVsync,
                         #[cfg(target_os = "linux")]
                         present_mode: bevy::window::PresentMode::Mailbox,
+                        #[cfg(not(any(target_os = "windows", target_os = "macos", target_os = "linux")))]
+                        present_mode: bevy::window::PresentMode::AutoNoVsync,
                         ..default()
                     }),
                     ..default()
