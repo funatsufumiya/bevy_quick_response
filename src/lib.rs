@@ -4,7 +4,7 @@ use bevy::{prelude::*, winit::{UpdateMode, WinitSettings}};
 use bevy_framepace::{FramepacePlugin, FramepaceSettings, Limiter};
 
 pub struct QuickResponsePlugin {
-    mode: QuickResponseMode,
+    pub mode: QuickResponseMode,
     /// if true, do not add the bevy_framepace::FramepacePlugin
     _no_framepace_for_test: bool
 }
@@ -314,11 +314,18 @@ impl Plugin for QuickResponsePlugin {
     }
 }
 
+#[cfg(test)] #[macro_use]
+extern crate assert_matches;
+
 #[cfg(test)]
 mod tests {
-    use bevy::{log::LogPlugin, winit::WinitPlugin};
-
     use super::*;
+
+    const CHECK_PRECISION : f64 = 0.0001;
+
+    fn float_eq(a: f64, b: f64) -> bool {
+        (a - b).abs() < CHECK_PRECISION
+    }
 
     #[test]
     fn test_plugin_none() {
@@ -339,65 +346,148 @@ mod tests {
 
     #[test]
     fn test_plugin_power_saving() {
-        let pl = QuickResponsePlugin::power_saving(60.0)
+        let pl = QuickResponsePlugin::power_saving(60.0);
+
+        assert_matches!(pl.mode, QuickResponseMode::PowerSaving(
+            QuickResponseParametersWithNoBaseFps { max_fps: x, auto_init_default_plugins: true })
+            if float_eq(x, 60.0)
+        );
+
+        let pl = pl
             .with_no_default_plugins()
             .with_no_framepace_for_test();
 
+        let window_pl = pl.window_plugin();
+
+        #[cfg(any(target_os = "windows", target_os = "linux"))]
+        assert_matches!(window_pl.primary_window, Some(Window {
+            present_mode: bevy::window::PresentMode::Mailbox, .. })
+        );
+
+        #[cfg(target_os = "macos")]
+        assert_matches!(window_pl.primary_window, Some(Window {
+            present_mode: bevy::window::PresentMode::AutoNoVsync, .. })
+        );
+
         App::new()
             .add_plugins(MinimalPlugins)
-            .add_plugins(pl.window_plugin())
+            .add_plugins(window_pl)
             .add_plugins(pl)
             .update()
     }
 
     #[test]
     fn test_plugin_default() {
-        let pl = QuickResponsePlugin::default()
+        let pl = QuickResponsePlugin::default();
+
+        assert_matches!(pl.mode, QuickResponseMode::FastVsync(
+            QuickResponseParameters { base_fps: x, max_fps: y, auto_init_default_plugins: true })
+            if float_eq(x, 60.0) && float_eq(y, 120.0)
+        );
+
+        let pl = pl
             .with_no_default_plugins()
             .with_no_framepace_for_test();
 
+        let window_pl = pl.window_plugin();
+
+        #[cfg(any(target_os = "windows", target_os = "linux"))]
+        assert_matches!(window_pl.primary_window, Some(Window {
+            present_mode: bevy::window::PresentMode::Mailbox, .. })
+        );
+
+        #[cfg(target_os = "macos")]
+        assert_matches!(window_pl.primary_window, Some(Window {
+            present_mode: bevy::window::PresentMode::AutoNoVsync, .. })
+        );
+
         App::new()
             .add_plugins(MinimalPlugins)
-            .add_plugins(pl.window_plugin())
+            .add_plugins(window_pl)
             .add_plugins(pl)
             .update()
     }
 
     #[test]
     fn test_plugin_fast_vsync() {
-        let pl = QuickResponsePlugin::new(QuickResponseMode::FastVsync(QuickResponseParameters::default()))
+        let pl = QuickResponsePlugin::new(QuickResponseMode::FastVsync(QuickResponseParameters::default()));
+
+        assert_matches!(pl.mode, QuickResponseMode::FastVsync(
+            QuickResponseParameters { base_fps: x, max_fps: y, auto_init_default_plugins: true })
+            if float_eq(x, 60.0) && float_eq(y, 120.0)
+        );
+
+        let pl = pl
             .with_no_default_plugins()
             .with_no_framepace_for_test();
 
+        let window_pl = pl.window_plugin();
+        
+        #[cfg(any(target_os = "windows", target_os = "linux"))]
+        assert_matches!(window_pl.primary_window, Some(Window {
+            present_mode: bevy::window::PresentMode::Mailbox, .. })
+        );
+
+        #[cfg(target_os = "macos")]
+        assert_matches!(window_pl.primary_window, Some(Window {
+            present_mode: bevy::window::PresentMode::AutoNoVsync, .. })
+        );
+
         App::new()
             .add_plugins(MinimalPlugins)
-            .add_plugins(pl.window_plugin())
+            .add_plugins(window_pl)
             .add_plugins(pl)
             .update()
     }
 
     #[test]
     fn test_plugin_immediate() {
-        let pl = QuickResponsePlugin::new(QuickResponseMode::Immediate(QuickResponseParameters::default()))
+        let pl = QuickResponsePlugin::new(QuickResponseMode::Immediate(QuickResponseParameters::default()));
+
+        assert_matches!(pl.mode, QuickResponseMode::Immediate(
+            QuickResponseParameters { base_fps: x, max_fps: y, auto_init_default_plugins: true })
+            if float_eq(x, 60.0) && float_eq(y, 120.0)
+        );
+
+        let pl = pl
             .with_no_default_plugins()
             .with_no_framepace_for_test();
 
+        let window_pl = pl.window_plugin();
+        
+        assert_matches!(window_pl.primary_window, Some(Window {
+            present_mode: bevy::window::PresentMode::Immediate, .. })
+        );
+
         App::new()
             .add_plugins(MinimalPlugins)
-            .add_plugins(pl.window_plugin())
+            .add_plugins(window_pl)
             .add_plugins(pl)
             .update()
     }
 
     #[test]
     fn test_plugin_auto_no_vsync() {
-        let pl = QuickResponsePlugin::new(QuickResponseMode::AutoNoVsync(QuickResponseParameters::default()))
+        let pl = QuickResponsePlugin::new(QuickResponseMode::AutoNoVsync(QuickResponseParameters::default()));
+
+        assert_matches!(pl.mode, QuickResponseMode::AutoNoVsync(
+            QuickResponseParameters { base_fps: x, max_fps: y, auto_init_default_plugins: true })
+            if float_eq(x, 60.0) && float_eq(y, 120.0)
+        );
+
+        let pl = pl
             .with_no_default_plugins()
             .with_no_framepace_for_test();
 
+        let window_pl = pl.window_plugin();
+        
+        assert_matches!(window_pl.primary_window, Some(Window {
+            present_mode: bevy::window::PresentMode::AutoNoVsync, .. })
+        );
+
         App::new()
             .add_plugins(MinimalPlugins)
-            .add_plugins(pl.window_plugin())
+            .add_plugins(window_pl)
             .add_plugins(pl)
             .update()
     }
