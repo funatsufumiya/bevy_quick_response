@@ -3,7 +3,7 @@ use bevy_quick_response::{QuickResponseMode, QuickResponseParameters, QuickRespo
 
 fn main() {
     let quick_response_plugin = QuickResponsePlugin::new(
-            QuickResponseMode::FastVsync(QuickResponseParameters {
+        QuickResponseMode::FastVsync(QuickResponseParameters {
             base_fps: 60.0, // Base FPS, for example: when window is not focused
             max_fps: 60.0, // Max FPS, for example: when mouse moves over window
             auto_init_default_plugins: false, // Disable DefaultPlugin initialization
