@@ -21,3 +21,9 @@ app.add_plugins(QuickResponsePlugin::default())
 (`DefaultPlugin` is automatically enabled, so no need to add it.)
 
 Customizing the behavior, see [examples/advanced.rs](examples/advanced.rs).
+
+## Version table
+
+| Bevy | bevy_quick_response |
+|---------|-----------------------------|
+| 0.13          | 0.1                       |
