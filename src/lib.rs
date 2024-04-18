@@ -17,8 +17,13 @@ pub enum QuickResponseMode {
     /// use auto no vsync for all platforms
     /// recommended if you want to work with multiple platforms, but may cause flickering
     AutoNoVsync (QuickResponseParameters),
-    /// do nothing: use the app default behavior (VSync)
-    None
+    /// Power saving mode: choose FastVsync for presentation, and use desktop app settings for winit
+    /// NOT recommended for games, but recommended for desktop apps.
+    PowerSaving (QuickResponseParametersWithNoBaseFps),
+    /// do nothing: use the app default behavior (VSync).
+    /// if bool is true, add the default plugins (DefaultPlugins, and WindowPlugin in it).
+    /// if bool is false, do nothing.
+    None(bool)
 }
 
 impl Default for QuickResponseMode {
@@ -29,13 +34,24 @@ impl Default for QuickResponseMode {
 
 #[derive(Debug, Clone, PartialEq, Copy)]
 pub struct QuickResponseParameters {
-    /// base fps, for example: when window is not focused
+    /// base fps, for example: when window is not focused.
     /// default: 60.0
     pub base_fps: f64,
-    /// max fps, for example: when mouse moves over window
+    /// max fps, for example: when mouse moves over window.
     /// default: 120.0
     pub max_fps: f64,
-    /// auto initialize default plugins (DefaultPlugins, and WindowPlugin in it)
+    /// auto initialize default plugins (DefaultPlugins, and WindowPlugin in it).
+    /// default: true
+    pub auto_init_default_plugins: bool
+}
+
+#[derive(Debug, Clone, PartialEq, Copy)]
+pub struct QuickResponseParametersWithNoBaseFps {
+    /// max fps, for example: when mouse moves over window.
+    /// default: 120.0
+    pub max_fps: f64,
+    /// auto initialize default plugins (DefaultPlugins, and WindowPlugin in it).
+    /// default: true
     pub auto_init_default_plugins: bool
 }
 
@@ -54,6 +70,17 @@ impl QuickResponsePlugin {
         QuickResponsePlugin {
             mode,
         }
+    }
+
+    pub fn power_saving(max_fps: f64) -> Self {
+        QuickResponsePlugin::new(QuickResponseMode::PowerSaving(QuickResponseParametersWithNoBaseFps {
+            max_fps,
+            auto_init_default_plugins: true
+        }))
+    }
+
+    pub fn none(is_default_plugins_enabled: bool) -> Self {
+        QuickResponsePlugin::new(QuickResponseMode::None(true))
     }
 
     pub fn window_plugin(&self) -> WindowPlugin {
@@ -92,7 +119,23 @@ impl QuickResponsePlugin {
                     ..default()
                 }
             },
-            QuickResponseMode::None => {
+            QuickResponseMode::PowerSaving(_) => {
+                WindowPlugin {
+                    primary_window: Some(Window {
+                        #[cfg(target_os = "windows")]
+                        present_mode: bevy::window::PresentMode::Mailbox,
+                        #[cfg(target_os = "macos")]
+                        present_mode: bevy::window::PresentMode::AutoNoVsync,
+                        #[cfg(target_os = "linux")]
+                        present_mode: bevy::window::PresentMode::Mailbox,
+                        #[cfg(not(any(target_os = "windows", target_os = "macos", target_os = "linux")))]
+                        present_mode: bevy::window::PresentMode::AutoNoVsync,
+                        ..default()
+                    }),
+                    ..default()
+                }
+            },
+            QuickResponseMode::None(_) => {
                 WindowPlugin::default()
             }
         }
@@ -111,41 +154,74 @@ fn setup_fps(max_fps: f64) -> impl Fn(ResMut<FramepaceSettings>) {
     }
 }
 
+fn is_base_fps_enabled(mode: QuickResponseMode) -> bool {
+    match mode {
+        QuickResponseMode::FastVsync(_) => true,
+        QuickResponseMode::Immediate(_) => true,
+        QuickResponseMode::AutoNoVsync(_) => true,
+        QuickResponseMode::PowerSaving(_) => false,
+        QuickResponseMode::None(_) => false,
+    }
+}
+
+fn is_power_saving_enabled(mode: QuickResponseMode) -> bool {
+    match mode {
+        QuickResponseMode::FastVsync(_) => false,
+        QuickResponseMode::Immediate(_) => false,
+        QuickResponseMode::AutoNoVsync(_) => false,
+        QuickResponseMode::PowerSaving(_) => true,
+        QuickResponseMode::None(_) => false,
+    }
+}
+
 impl Plugin for QuickResponsePlugin {
     fn build(&self, app: &mut App) {
-        if self.mode == QuickResponseMode::None {
+        if self.mode == QuickResponseMode::None(false) {
             // do nothing
+            return;
+        } else if self.mode == QuickResponseMode::None(true) {
+            // just add the default plugins
+            app.add_plugins(DefaultPlugins);
             return;
         }
 
-        let base_fps = match self.mode {
-            QuickResponseMode::FastVsync(params) => params.base_fps,
-            QuickResponseMode::AutoNoVsync(params) => params.base_fps,
-            QuickResponseMode::Immediate(params) => params.base_fps,
-            _ => unreachable!()
-        };
+        if is_base_fps_enabled(self.mode) {
+            let base_fps = match self.mode {
+                QuickResponseMode::FastVsync(params) => params.base_fps,
+                QuickResponseMode::AutoNoVsync(params) => params.base_fps,
+                QuickResponseMode::Immediate(params) => params.base_fps,
+                QuickResponseMode::PowerSaving(_) => unreachable!(),
+                QuickResponseMode::None(_) => unreachable!(),
+            };
+
+            app
+                .insert_resource(WinitSettings {
+                    focused_mode: UpdateMode::ReactiveLowPower { wait: Duration::from_secs_f64(1.0 / base_fps) },
+                    unfocused_mode: UpdateMode::ReactiveLowPower { wait: Duration::from_secs_f64(1.0 / base_fps) },
+                    ..default()
+                })
+                ;
+        } else if is_power_saving_enabled(self.mode) {
+            app
+                .insert_resource(WinitSettings::desktop_app())
+                ;
+        }
 
         let max_fps = match self.mode {
             QuickResponseMode::FastVsync(params) => params.max_fps,
             QuickResponseMode::AutoNoVsync(params) => params.max_fps,
             QuickResponseMode::Immediate(params) => params.max_fps,
-            _ => unreachable!()
+            QuickResponseMode::PowerSaving(params) => params.max_fps,
+            QuickResponseMode::None(_) => unreachable!(),
         };
 
         let auto_init_default_plugins = match self.mode {
             QuickResponseMode::FastVsync(params) => params.auto_init_default_plugins,
             QuickResponseMode::AutoNoVsync(params) => params.auto_init_default_plugins,
             QuickResponseMode::Immediate(params) => params.auto_init_default_plugins,
-            _ => unreachable!()
+            QuickResponseMode::PowerSaving(params) => params.auto_init_default_plugins,
+            QuickResponseMode::None(_) => unreachable!(),
         };
-
-        app
-            .insert_resource(WinitSettings {
-                focused_mode: UpdateMode::ReactiveLowPower { wait: Duration::from_secs_f64(1.0 / base_fps) },
-                unfocused_mode: UpdateMode::ReactiveLowPower { wait: Duration::from_secs_f64(1.0 / base_fps) },
-                ..default()
-            })
-            ;
 
         app
             .add_plugins(())
