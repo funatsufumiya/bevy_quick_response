@@ -37,4 +37,4 @@ Customizing the behavior, see [examples/advanced.rs](examples/advanced.rs).
 
 ## Notes
 
-- By default, there may be flickering on Mac, but the tuning is fine in the author's verification environment (M1/M2). (The reason for setting the maximum FPS to 120 is for that adjustment.)
+- Currently, there is no mode provided from Bevy Engine that corresponds to Fast VSync on Mac, so there may be flickering, but the tuning is fine in the author's verification environment (M1/M2). (The reason why the maximum FPS is set to 120 is for that adjustment.)
