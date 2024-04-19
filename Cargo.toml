@@ -4,6 +4,7 @@ version = "0.1.10"
 edition = "2021"
 license = "WTFPL"
 description = "A Bevy plugin for quick responsive behaviors"
+repository = "https://github.com/funatsufumiya/bevy_quick_response"
 # autoexamples = false
 
 [dev-dependencies]
