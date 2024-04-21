@@ -308,7 +308,9 @@ impl Plugin for QuickResponsePlugin {
         }
 
         if !self._no_framepace_for_test {
-            app.add_plugins(FramepacePlugin);
+            if !app.is_plugin_added::<FramepacePlugin>() {
+                app.add_plugins(FramepacePlugin);
+            }
             app.add_systems(Startup, setup_fps(max_fps));
         }
     }
