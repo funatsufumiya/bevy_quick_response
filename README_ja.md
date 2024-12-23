@@ -24,6 +24,7 @@ app.add_plugins(QuickResponsePlugin::default())
 
 | Bevy | bevy_quick_response |
 |---------|-----------------------------|
+| 0.15          | 0.3                       |
 | 0.14          | 0.2                       |
 | 0.13          | 0.1                       |
 

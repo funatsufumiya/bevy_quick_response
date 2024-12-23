@@ -1,6 +1,7 @@
 use std::time::Duration;
 
 use bevy::{prelude::*, winit::{UpdateMode, WinitSettings}};
+use bevy::window::{Window, WindowPlugin};
 use bevy_framepace::{FramepacePlugin, FramepaceSettings, Limiter};
 
 pub struct QuickResponsePlugin {

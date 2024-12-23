@@ -38,7 +38,7 @@ pub struct FpsText;
 fn setup_camera(
     mut commands: Commands,
 ) {
-    commands.spawn((Camera2dBundle::default(), MainCamera));
+    commands.spawn((Camera2d::default(), MainCamera));
 }
 
 fn draw_gizmos(
@@ -51,7 +51,7 @@ fn draw_gizmos(
 
     if let Some(position) = window
         .cursor_position()
-        .and_then(|cursor| camera.viewport_to_world_2d(camera_transform, cursor))
+        .and_then(|cursor| camera.viewport_to_world_2d(camera_transform, cursor).ok())
     {
         // gizmos.circle_2d(position, 10.0, Color::RED);
         gizmos.circle_2d(position, 10.0, Color::linear_rgb(1.0, 0.0, 0.0));
@@ -62,34 +62,26 @@ pub fn setup_fps_text(
     mut commands: Commands,
 ) {
     commands.spawn((
-        TextBundle::from_sections([
-            TextSection::new(
-                "FPS: ",
-                TextStyle {
-                    font_size: 30.0,
-                    ..default()
-                },
-            ),
-            TextSection::new(
-                "0",
-                TextStyle {
-                    font_size: 30.0,
-                    ..default()
-                },
-            ),
-        ]),
-        FpsText,
-    ));
+        Text::new("FPS: "),
+        TextFont { font_size: 30.0, ..default() },
+    )).with_children(|parent| {
+        parent.spawn(
+        (
+            TextSpan::new("0"),
+            TextFont { font_size: 30.0, ..default() },
+            FpsText,
+        ));
+    });
 }
 
 fn show_fps(
     diagnostics: Res<DiagnosticsStore>,
-    mut query: Query<&mut Text, With<FpsText>>,
+    mut query: Query<&mut TextSpan, With<FpsText>>,
 ) {
     for mut text in &mut query {
         if let Some(fps) = diagnostics.get(&FrameTimeDiagnosticsPlugin::FPS) {
             if let Some(value) = fps.smoothed() {
-                text.sections[1].value = format!("{value:.2}");
+                text.0 = format!("{value:.2}");
             }
         }
     }
