@@ -32,7 +32,7 @@ app.add_plugins(QuickResponsePlugin::default())
 
 - デフォルトでは、Windows/Linux (DX11/DX12, Vulkan) では[`Mailbox`](https://docs.rs/bevy_window/latest/bevy_window/enum.PresentMode.html#variant.Mailbox) (Fast VSync)、macOS (Metal) やそれ以外では [`AutoNoVsync`](https://docs.rs/bevy_window/latest/bevy_window/enum.PresentMode.html#variant.AutoNoVsync) が選択されます。
 - ベースFPSは60、最大FPSは120に設定されます。
-    - ベースFPSの設定は [`UpdateMode::ReactiveLowPower`](https://docs.rs/bevy/latest/bevy/winit/enum.UpdateMode.html#variant.ReactiveLowPower) の`wait`を利用しています。
+    - ベースFPSの設定は [`UpdateMode::reactive_low_power()`](https://docs.rs/bevy/latest/bevy/winit/enum.UpdateMode.html#method.reactive_low_power) の`wait`を利用しています。
     - 最大FPSの制限は、[bevy_framepace](https://github.com/aevyrie/bevy_framepace)を利用しています。
 
 ## 注意点
