@@ -1,12 +1,28 @@
 use bevy::{diagnostic::{DiagnosticsStore, FrameTimeDiagnosticsPlugin}, prelude::*, window::PrimaryWindow};
 use bevy_quick_response::QuickResponsePlugin;
 
+pub fn close_on_esc(
+    mut commands: Commands,
+    focused_windows: Query<(Entity, &Window)>,
+    input: Res<ButtonInput<KeyCode>>,
+) {
+    for (window, focus) in focused_windows.iter() {
+        if !focus.focused {
+            continue;
+        }
+
+        if input.just_pressed(KeyCode::Escape) {
+            commands.entity(window).despawn();
+        }
+    }
+}
+
 fn main() {
     App::new()
         // NOTE: DefaultPlugin added automatically by default in QuickResponsePlugin
         .add_plugins(QuickResponsePlugin::default())
         .add_plugins(FrameTimeDiagnosticsPlugin::default())
-        .add_systems(Update, bevy::window::close_on_esc)
+        .add_systems(Update, close_on_esc)
         .add_systems(Startup, setup_camera)
         .add_systems(Startup, setup_fps_text)
         .add_systems(Update, draw_gizmos)
@@ -38,7 +54,8 @@ fn draw_gizmos(
         .cursor_position()
         .and_then(|cursor| camera.viewport_to_world_2d(camera_transform, cursor))
     {
-        gizmos.circle_2d(position, 10.0, Color::RED);
+        // gizmos.circle_2d(position, 10.0, Color::RED);
+        gizmos.circle_2d(position, 10.0, Color::linear_rgb(1.0, 0.0, 0.0));
     }
 }
 

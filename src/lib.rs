@@ -270,8 +270,8 @@ impl Plugin for QuickResponsePlugin {
 
             app
                 .insert_resource(WinitSettings {
-                    focused_mode: UpdateMode::ReactiveLowPower { wait: Duration::from_secs_f64(1.0 / base_fps) },
-                    unfocused_mode: UpdateMode::ReactiveLowPower { wait: Duration::from_secs_f64(1.0 / base_fps) },
+                    focused_mode: UpdateMode::reactive_low_power(Duration::from_secs_f64(1.0 / base_fps) ),
+                    unfocused_mode: UpdateMode::reactive_low_power(Duration::from_secs_f64(1.0 / base_fps) ),
                     ..default()
                 })
                 ;

@@ -1,6 +1,6 @@
 [package]
 name = "bevy_quick_response"
-version = "0.1.11"
+version = "0.2.0"
 edition = "2021"
 license = "WTFPL"
 description = "A Bevy plugin for quick responsive behaviors"
@@ -8,7 +8,7 @@ repository = "https://github.com/funatsufumiya/bevy_quick_response"
 # autoexamples = false
 
 [dev-dependencies]
-bevy = { version = "0.13", default-features = false, features = [
+bevy = { version = "0.14", default-features = false, features = [
     "bevy_winit",
     "bevy_asset",
     "bevy_sprite",
@@ -22,8 +22,8 @@ bevy = { version = "0.13", default-features = false, features = [
 assert_matches = "1.5"
 
 [dependencies]
-bevy = { version = "0.13", default-features = false, features = [
+bevy = { version = "0.14", default-features = false, features = [
     "bevy_winit",
     "bevy_asset",
 ] }
-bevy_framepace = "0.15.0"
+bevy_framepace = "0.17.0"
