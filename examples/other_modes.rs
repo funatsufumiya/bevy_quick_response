@@ -53,8 +53,8 @@ fn draw_gizmos(
     windows: Query<&Window, With<PrimaryWindow>>,
     cameras: Query<(&Camera, &GlobalTransform), With<MainCamera>>,
 ) {
-    let window = windows.single();
-    let (camera, camera_transform) = cameras.single();
+    let window = windows.single().unwrap();
+    let (camera, camera_transform) = cameras.single().unwrap();
 
     if let Some(position) = window
         .cursor_position()
