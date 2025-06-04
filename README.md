@@ -8,7 +8,7 @@
 
 A Bevy plugin, which changes the initial settings to respond immediately to user input.
 
-The normal behavior of Bevy is to turn on VSync, which causes a delay of 3 frames. On the other hand, turning off VSync removes the FPS limit and increases the load on the CPU/GPU.
+The normal behavior of Bevy is turning on VSync, which causes a delay of 3 frames. On the other hand, turning off VSync removes the FPS limit and increases the load on the CPU/GPU.
 
 This plugin changes the settings to turn off VSync to improve responsiveness while behaving as close as possible to when VSync is on. (By default, the base FPS is set to 60 and the maximum FPS is set to 120.)
 
