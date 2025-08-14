@@ -45,3 +45,7 @@ Customizing the behavior, see [examples/advanced.rs](examples/advanced.rs).
 ## TODOs
 
 - Update window settings after added `DefaultPlugin` by other settings except this plugin.
+
+## License
+
+Dual licensed under WTFPL and/or 0BSD.

@@ -39,3 +39,7 @@ app.add_plugins(QuickResponsePlugin::default())
 ## 注意点
 
 - Macでは現状Fast VSyncにあたるモードがBevyで提供されていないため、チラツキが発生する可能性がありますが、作者の検証環境(M1/M2)では問題ないチューニングになっています。(最大FPSを120にしているのはその調整のためです。)
+
+## License
+
+Dual licensed under WTFPL and/or 0BSD.

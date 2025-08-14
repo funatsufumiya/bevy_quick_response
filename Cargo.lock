@@ -734,7 +734,7 @@ checksum = "86f1275dfb4cfef4ffc90c3fa75408964864facf833acc932413d52aa5364ba4"
 
 [[package]]
 name = "bevy_quick_response"
-version = "0.4.1"
+version = "0.4.2"
 dependencies = [
  "assert_matches",
  "bevy",
