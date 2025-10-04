@@ -26,7 +26,7 @@ Customizing the behavior, see [examples/advanced.rs](examples/advanced.rs).
 
 | Bevy          | bevy_quick_response       |
 |---------------|---------------------------|
-| 0.17          | 0.5 (git main until #2)   |
+| 0.17          | 0.5 (git main until [#2](https://github.com/funatsufumiya/bevy_quick_response/issues/2))   |
 | 0.16          | 0.4                       |
 | 0.15          | 0.3                       |
 | 0.14          | 0.2                       |
