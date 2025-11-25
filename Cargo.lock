@@ -663,7 +663,8 @@ dependencies = [
 [[package]]
 name = "bevy_framepace"
 version = "0.20.0"
-source = "git+https://github.com/TotalKrill/bevy_framepace?rev=ea62830#ea6283031b6a39f44cbcf4de424df1ea72d260b6"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "98664324f1ee21f2f19ada3a2c108662d1b4fbf7806eb84780f5d4d5814eb051"
 dependencies = [
  "bevy_app",
  "bevy_diagnostic",
@@ -1106,7 +1107,7 @@ checksum = "0b3533a9a9c2158bc704c18ba26f0f0692d0423ff0a10b656b8db46a9b953620"
 
 [[package]]
 name = "bevy_quick_response"
-version = "0.5.0"
+version = "0.5.1"
 dependencies = [
  "assert_matches",
  "bevy",

@@ -1,6 +1,6 @@
 [package]
 name = "bevy_quick_response"
-version = "0.5.0"
+version = "0.5.1"
 edition = "2021"
 license = "WTFPL OR 0BSD"
 description = "A Bevy plugin for quick responsive behaviors"
@@ -30,6 +30,6 @@ bevy = { version = "^0.17", default-features = false, features = [
     "bevy_window",
     "bevy_asset",
 ] }
-# bevy_framepace = "^0.20"
+bevy_framepace = "^0.20"
 # bevy_framepace = { version = "0.20.0-rc.1" }
-bevy_framepace = { git = "https://github.com/TotalKrill/bevy_framepace", rev="ea62830" }
+# bevy_framepace = { git = "https://github.com/TotalKrill/bevy_framepace", rev="ea62830" }
