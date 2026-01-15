@@ -26,6 +26,7 @@ Customizing the behavior, see [examples/advanced.rs](examples/advanced.rs).
 
 | Bevy          | bevy_quick_response       |
 |---------------|---------------------------|
+| 0.18          | 0.6                       |
 | 0.17          | 0.5                       |
 | 0.16          | 0.4                       |
 | 0.15          | 0.3                       |

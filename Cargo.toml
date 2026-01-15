@@ -1,6 +1,6 @@
 [package]
 name = "bevy_quick_response"
-version = "0.5.1"
+version = "0.6.0"
 edition = "2021"
 license = "WTFPL OR 0BSD"
 description = "A Bevy plugin for quick responsive behaviors"
@@ -8,7 +8,7 @@ repository = "https://github.com/funatsufumiya/bevy_quick_response"
 # autoexamples = false
 
 [dev-dependencies]
-# bevy = { version = "^0.17", default-features = false, features = [
+# bevy = { version = "^0.18", default-features = false, features = [
 #     "bevy_winit",
 #     "bevy_asset",
 #     "bevy_sprite",
@@ -21,15 +21,15 @@ repository = "https://github.com/funatsufumiya/bevy_quick_response"
 #     "default_font",
 # ] }
 
-bevy = { version = "^0.17" }
+bevy = { version = "^0.18" }
 assert_matches = "1.5"
 
 [dependencies]
-bevy = { version = "^0.17", default-features = false, features = [
+bevy = { version = "^0.18", default-features = false, features = [
     "bevy_winit",
     "bevy_window",
     "bevy_asset",
 ] }
-bevy_framepace = "^0.20"
+# bevy_framepace = "^0.21"
 # bevy_framepace = { version = "0.20.0-rc.1" }
-# bevy_framepace = { git = "https://github.com/TotalKrill/bevy_framepace", rev="ea62830" }
+bevy_framepace = { git = "https://github.com/recatek/bevy_framepace", rev="28f6b77" }
