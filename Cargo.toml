@@ -31,5 +31,6 @@ bevy = { version = "^0.18", default-features = false, features = [
     "bevy_asset",
 ] }
 # bevy_framepace = "^0.21"
+bevy_framepace = { path = "externals/bevy_framepace", version = "^0.21" }
 # bevy_framepace = { version = "0.20.0-rc.1" }
-bevy_framepace = { git = "https://github.com/recatek/bevy_framepace", rev="28f6b77" }
+# bevy_framepace = { git = "https://github.com/recatek/bevy_framepace", rev="28f6b77" }

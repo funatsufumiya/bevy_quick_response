@@ -695,7 +695,6 @@ dependencies = [
 [[package]]
 name = "bevy_framepace"
 version = "0.21.0"
-source = "git+https://github.com/recatek/bevy_framepace?rev=28f6b77#28f6b77990aaccdad7ce2809770849e1759ab9a3"
 dependencies = [
  "bevy_app",
  "bevy_diagnostic",
