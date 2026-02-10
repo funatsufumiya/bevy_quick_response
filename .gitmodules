@@ -1,3 +1,0 @@
-[submodule "externals/bevy_framepace"]
-	path = externals/bevy_framepace
-	url = https://github.com/aevyrie/bevy_framepace

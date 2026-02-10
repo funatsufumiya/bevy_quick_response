@@ -695,6 +695,8 @@ dependencies = [
 [[package]]
 name = "bevy_framepace"
 version = "0.21.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "a42ab83f581861fd57b1c6170503a5e352a0937d799d03a4224e1735e668af51"
 dependencies = [
  "bevy_app",
  "bevy_diagnostic",
@@ -2755,7 +2757,7 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "4b0f83760fb341a774ed326568e19f5a863af4a952def8c39f9ab92fd95b88e5"
 dependencies = [
  "equivalent",
- "hashbrown 0.15.5",
+ "hashbrown 0.16.1",
  "serde",
  "serde_core",
 ]
